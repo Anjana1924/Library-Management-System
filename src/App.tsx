@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Home from "./components/home";
 import Login from "./components/login";
 import Register from "./components/register";
@@ -9,6 +9,7 @@ type Page = "home" | "login" | "register" | "dashboard";
 
 function App() {
   const [page, setPage] = useState<Page>("home");
+
 
   return (
     <div className="app">
