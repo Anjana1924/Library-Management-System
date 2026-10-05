@@ -1,9 +1,8 @@
 import express from "express";
 import cors from "cors";
-import mySql from "mysql2/promise";
 
 import authRoutes from "./routes/authRoutes";
-import database from "./config/database";
+import pool from "./config/database";
 
 const app = express();
 
@@ -24,40 +23,22 @@ app.use(express.json());
 /*
   Authentication routes
 */
-app.use(
-  "/api/auth",
-  authRoutes
-);
-
-const db  = mySql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: process.env.DB_PASSWORD,
-  database: "library_management"
-});
+app.use("/api/auth", authRoutes);
 
 /*
   Test route
 */
 app.get("/", (req, res) => {
-
   res.json({
-    message:
-      "Library Management API is running"
+    message: "Library Management API is running"
   });
-
 });
 
 /*
   Start server
 */
-app.listen(
-  PORT,
-  () => {
-
-    console.log(
-      `Backend running on http://localhost:${PORT}`
-    );
-
-  }
-);
+app.listen(PORT, () => {
+  console.log(
+    `Backend running on http://localhost:${PORT}`
+  );
+});

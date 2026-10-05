@@ -30,26 +30,18 @@ services:
     container_name: library-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: AnjanaKavee@1924
       MYSQL_DATABASE: library_management
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-uroot",
-          "-prootpassword"
-        ]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p'AnjanaKavee@1924' --silent"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
+      start_period: 30s
 
 volumes:
   mysql_data:
