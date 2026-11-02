@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './pages/login';
+import Register from './pages/register';
 import AdminLogin from './pages/AdminLogin';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/dashboard';
 import BooksPage from './pages/BooksPage';
 import History from './pages/History';
 import Profile from './pages/Profile';

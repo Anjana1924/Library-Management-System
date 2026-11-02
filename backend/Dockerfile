@@ -2,17 +2,8 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-<<<<<<< HEAD
-
 RUN npm ci
-
 COPY . .
-
-=======
-RUN npm ci
-COPY tsconfig.json ./
-COPY src ./src
->>>>>>> 2a5c35c (Restructure app: Express + MongoDB backend, new React UI, Docker)
 RUN npm run build
 
 # ---- runtime stage ----

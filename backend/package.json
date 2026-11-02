@@ -25,11 +25,7 @@
     "@types/node": "^20.14.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-<<<<<<< HEAD
     "tsx": "^4.23.15",
     "typescript": "~5.9.3"
-=======
-    "typescript": "^5.5.0"
->>>>>>> 2a5c35c (Restructure app: Express + MongoDB backend, new React UI, Docker)
   }
 }
