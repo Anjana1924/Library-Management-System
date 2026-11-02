@@ -1,47 +1,38 @@
 services:
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:80"
-    depends_on:
-      - backend
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: AnjanaKavee@1924
-      DB_NAME: library_management
-      DB_PORT: 3306
-    depends_on:
-      mysql:
-        condition: service_healthy
-
-  mysql:
-    image: mysql:8.0
-    container_name: library-mysql
+    build: ./backend
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: AnjanaKavee@1924
-      MYSQL_DATABASE: library_management
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/library_db
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in the .env file}
+      CLIENT_URL: http://localhost:8080
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@library.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
+    depends_on:
+      mongo:
+        condition: service_healthy
     ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p'AnjanaKavee@1924' --silent"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 30s
+      - "5000:5000"   # optional: only needed to call the API directly
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
 
 volumes:
-  mysql_data:
+  mongo_data:

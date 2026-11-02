@@ -1,76 +1,14 @@
-interface DashboardProps {
-  onLogout: () => void;
-}
+import { Link } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 
-function Dashboard({ onLogout }: DashboardProps) {
+export default function Dashboard() {
   return (
-    <div className="dashboard">
-
-      <header className="dashboard-header">
-
-        <div className="dashboard-logo">
-          Dash Board
-        </div>
-
-        <nav>
-          <button>Home</button>
-          <button>Contact</button>
-          <button>Help</button>
-          <button>About Us</button>
-
-          <button
-            className="logout-button"
-            onClick={onLogout}
-          >
-            Logout
-          </button>
-        </nav>
-
-      </header>
-
-      <main className="dashboard-content">
-
-        <h1>
-          Welcome to Library Management System
-        </h1>
-
-        <p>
-          Manage books, members, borrowing and
-          returning records easily.
-        </p>
-
-        <div className="dashboard-cards">
-
-          <div className="dashboard-card">
-            <h2>Books</h2>
-            <p>Manage library books</p>
-            <button>View Books</button>
-          </div>
-
-          <div className="dashboard-card">
-            <h2>Members</h2>
-            <p>Manage library members</p>
-            <button>View Members</button>
-          </div>
-
-          <div className="dashboard-card">
-            <h2>Borrow</h2>
-            <p>Manage borrowed books</p>
-            <button>Borrow Books</button>
-          </div>
-
-          <div className="dashboard-card">
-            <h2>Returns</h2>
-            <p>Manage returned books</p>
-            <button>View Returns</button>
-          </div>
-
-        </div>
-
-      </main>
-
+    <div className="bg-dark">
+      <PageHeader title="Dash Board" showNav />
+      <div className="container tiles">
+        <Link to="/books" className="tile">BOOKS</Link>
+        <Link to="/history" className="tile">HISTORY</Link>
+      </div>
     </div>
   );
 }
-
-export default Dashboard;

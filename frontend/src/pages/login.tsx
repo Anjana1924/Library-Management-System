@@ -1,107 +1,43 @@
-interface LoginProps {
-  onRegister: () => void;
-  onDashboard: () => void;
-  onHome: () => void;
-}
+import { useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthShell from '../components/AuthShell';
+import { useAuth } from '../context/AuthContext';
+import { errMsg } from '../api';
 
-function Login({
-  onRegister,
-  onDashboard,
-  onHome
-}: LoginProps) {
+export default function Login() {
+  const { loginMember } = useAuth();
+  const navigate = useNavigate();
+  const [regNo, setRegNo] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
-
-    // Temporary navigation
-    // Later we will check MongoDB here
-    onDashboard();
-  };
-
-  const handleAdminLogin = () => {
-    // Later we can create a separate admin authentication
-    onDashboard();
+    setError('');
+    try {
+      await loginMember(regNo, password);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(errMsg(err));
+    }
   };
 
   return (
-    <div className="page login-page">
-
-      <button
-        className="back-button"
-        onClick={onHome}
-      >
-        ←
-      </button>
-
-      <div className="login-box">
-        <br/>
-        <br/>
-
-        <form onSubmit={handleLogin}>
-
-          <div className="input-row">
-            <label>Reg No. :</label>
-
-            <input
-              type="text"
-              required
-            />
-          </div>
-
-          <div className="input-row">
-            <label>Password :</label>
-
-            <input
-              type="password"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="glass-button"
-          >
-            LOGGING
-          </button>
-
-        </form>
-        <hr/>
-
-        <div className="account-text">
-          <span>
-            If you don't have Account
-          
-          </span>
-          
-            <br/>
-            <br/>
-          <button
-            className="text-button"
-            onClick={onRegister}
-          >
-            Create New Account
-          </button>
-        </div>
-
-        <button
-          className="glass-button admin-button"
-          onClick={handleAdminLogin}
-        >
-          Logging as Admin
-        </button>
-
-      </div>
-
-      <div className="right-title">
-        <h1>
-          LIBRARY<br />
-          MANAGEMENT<br />
-          SYSTEM
-        </h1>
-      </div>
-
-    </div>
+    <AuthShell>
+      <form onSubmit={submit}>
+        <label className="field">Reg No. :
+          <input value={regNo} onChange={(e) => setRegNo(e.target.value)} required />
+        </label>
+        <label className="field">Password :
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        </label>
+        {error && <p className="error">{error}</p>}
+        <button className="btn pill" type="submit">LOGGING</button>
+        <hr />
+        <p className="small">If you don't have Account</p>
+        <p className="small right"><Link to="/register">Create New Account</Link></p>
+      </form>
+      <Link to="/admin-login" className="btn pill block-link">Logging as Admin</Link>
+    </AuthShell>
   );
 }
-
-export default Login;

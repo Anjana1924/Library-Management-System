@@ -1,15 +1,27 @@
-FROM node:20-alpine
-
+# ---- build stage ----
+FROM node:20-alpine AS build
 WORKDIR /app
-
 COPY package*.json ./
+<<<<<<< HEAD
 
 RUN npm ci
 
 COPY . .
 
+=======
+RUN npm ci
+COPY tsconfig.json ./
+COPY src ./src
+>>>>>>> 2a5c35c (Restructure app: Express + MongoDB backend, new React UI, Docker)
 RUN npm run build
 
+# ---- runtime stage ----
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=build /app/dist ./dist
+USER node
 EXPOSE 5000
-
-CMD ["npm", "start"]
+CMD ["node", "dist/server.js"]
